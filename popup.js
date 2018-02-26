@@ -1,28 +1,24 @@
 document.onreadystatechange = () => {
   if (document.readyState === 'complete') {
-	var svgEl = document.querySelector('.demoChartContainer svg');
-	svgEl.addEventListener('click', function(event) {
-		// TODO listen for specific elements + pass associated data
-		var personStory = {
-			name: 'Salam',
-			age: 22,
-			status: 'Refugee',
-			country: 'Syria',
-			education: 'Gymnasial utbildning (high school). Studied eftergymnasial utbildning (college),  bank clerk.',
-			occupation: 'Unemployed',
-			quote: '"We saw how the rockets and the bombs flew through the air above us."',
-			link: 'http://pejl.svt.se/syrien200/sv/stories/82'
-		}
-		addPopUp(event, personStory);
+	$('.demoChartContainer').on('popup', function (event, story) {
+		// Add pop up next to event
+		var circle = document.querySelector('#' + story.AgeGroup);
+		addPopUp(circle, story);
 	})
   }
 };
 
 // TODO connect with data
-function addPopUp(event, personStory) {
+function addPopUp(circle, personStory) {
 	var popUp = constructPopUp(personStory);
-	popUp.style.left = event.clientX;
-	popUp.style.top = event.clientY;
+	var x = +circle.getAttribute('cx') + +circle.getAttribute('r') + 15;
+	var y = +circle.getAttribute('cy');
+	popUp.style.left = x;
+	if (y > 300) {
+		popUp.style.bottom = 0;
+	} else {
+		popUp.style.top = y;
+	}
 
 	// Add popUp to 
 	var chartContainer = document.querySelector('.demoChartContainer');
@@ -41,7 +37,6 @@ function addPopUp(event, personStory) {
 	closeButton.addEventListener('click', function() {
 		chartContainer.removeChild(popUp);
 	})
-	console.log(popUp.children);
 	popUp.querySelector('.popClose').append(closeButton);
 }
 
@@ -49,13 +44,13 @@ function constructPopUp(personStory) {
 	var popUp = document.createElement('div');
 	popUp.classList.add('popUp');
 	popUp.innerHTML = '<div class="popClose"></div>'
-	popUp.innerHTML += '<h3>' + personStory.name + ', ' + personStory.age + '</h3>';
-	popUp.innerHTML += '<p><b>Country: </b>' + personStory.country + '</p>';
-	popUp.innerHTML += '<p><b>Status: </b>' + personStory.status + '</p>';
-	popUp.innerHTML += '<p><b>Education: </b>' + personStory.education + '</p>';
-	popUp.innerHTML += '<p><b>Occupation: </b>' + personStory.occupation + '</p>';
-	popUp.innerHTML += '<p class="quote">' + personStory.quote + '</p>';
-	popUp.innerHTML += '<p><a href="' + personStory.link + '" target="_blank">Read ' + personStory.name + '\'s full story</a>';
+	popUp.innerHTML += '<h3>' + personStory.Name + ', ' + personStory.Age + '</h3>';
+	popUp.innerHTML += '<p><b>Country: </b>' + personStory.Country + '</p>';
+	popUp.innerHTML += '<p><b>Status: </b>' + personStory.Status + '</p>';
+	popUp.innerHTML += '<p><b>Education: </b>' + personStory.Education + '</p>';
+	popUp.innerHTML += '<p><b>Occupation: </b>' + personStory.Occupation + '</p>';
+	popUp.innerHTML += '<p class="quote">' + personStory.Quote + '</p>';
+	popUp.innerHTML += '<p><a href="' + personStory.StoryLink + '" target="_blank">Read ' + personStory.Name + '\'s full story</a>';
 	return popUp;
 }
 

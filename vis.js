@@ -2,6 +2,7 @@ var zoomSlider;
 var yearSlider;
 var bubbleReducer = 110;
 var stories = null;
+var storyIDs = null;
 
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -25,9 +26,8 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   d3.csv(storiesCSV, function (csvStories) {
-    csvStories.forEach(function (row) {
-      row['CircleID'] = row['Country']+row['AgeGroup'];
-    })
+    stories = csvStories;
+    storyIDs = stories.map(story => story['AgeGroup']);
   })
 
   zoomSlider = document.getElementById('zoomSlider');
@@ -101,6 +101,26 @@ const createDemographicsBubbleChart = function(demographics){
             .attr('r', function(row) { return zoom * Math.sqrt(row[year]) })
             .attr('cx', function(row) { return 128 + ((width - 128) / domain * rank) + ((width - 128) / domain / 2); })
             .attr('cy', function(row, index) { return height - ((height / range) * index) - (height / range / 2); });
+
+    // Listener for clicks
+    svg.selectAll('circle').on('click', function(d, i) {
+      var circleID = (d['födelseland'] + d['ålder']).replace(/\s+/g, '-');
+      if (storyIDs.includes(circleID)) {
+        var found = stories.filter(story => story['AgeGroup'] === circleID);
+        if (found.length) {
+          var story = found[0];
+          $('.demoChartContainer').trigger('popup', [story]);
+        }
+      }
+    })
+
+    // Make visually different
+    stories.forEach(function (story) {
+      var circleID = story.AgeGroup;
+      svg.select('#' + circleID)
+        .attr('stroke', 'red')
+        .attr('stroke-width', '5px');
+    })
   };
 
   largestCountries.forEach(function(country, index){
