@@ -1,5 +1,5 @@
 var zoomSlider;
-var bubbleReducer = 100;
+var bubbleReducer = 110;
 
 document.addEventListener('DOMContentLoaded', function(){
 
