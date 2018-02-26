@@ -38,7 +38,7 @@ const createDemographicsBubbleChart = function(demographics){
   }
 
   var ages = demographics.filter(function(row){ return row['födelseland'] == 'Afghanistan'; })
-                          .map( row => row['ålder'] );
+                          .map( row => row['age'] );
   var countries = _.uniq(demographics.map( row => row['födelseland']));
   var countryTotals = countries.map( function(country){ return { name: country, total: getTotalFor(country), }; });
   var countriesSortedBySize = _.sortBy(countryTotals, function(country){ return -country.total; });
