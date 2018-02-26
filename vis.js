@@ -59,7 +59,7 @@ const createDemographicsBubbleChart = function(demographics){
   var year = yearSlider.value;
   var height = 700 - 16;
   var width = 1280;
-  var svg = d3.select('svg');
+  var svg = d3.select('svg#demoSVG');
   var colors = d3.scaleOrdinal(d3.schemeDark2);
   var showSweden = swedenCheckbox.checked;
 
