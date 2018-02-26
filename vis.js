@@ -43,12 +43,13 @@ const createDemographicsBubbleChart = function(demographics){
   var largestCountries = _.take(countriesSortedBySize, 11);
   var range = ages.length;
   var domain = largestCountries.length;
-  const getZoomFactor = function(sliderValue) { return 64 / (largestCountries[0].total * 0.005) * sliderValue; };
+  const getZoomFactor = function(sliderValue) { return 512 / (largestCountries[0].total * 0.005) * sliderValue; };
   var zoom = getZoomFactor(zoomSlider.value);
   var year = yearSlider.value;
   var height = 700 - 16;
-  var width = 1024;
+  var width = 1280;
   var svg = d3.select('svg');
+  var colors = d3.scaleOrdinal(d3.schemeDark2);
 
   zoomSlider.addEventListener('input', function(e) {
     zoom = getZoomFactor(e.target.value);
@@ -86,7 +87,7 @@ const createDemographicsBubbleChart = function(demographics){
           .enter().append('circle')
             .attr('id', function(d){ return (d['födelseland'] + d['ålder']).replace(/\s+/g, '-') })
             .attr('class', countryName.replace(/\s+/g, '-'))
-            .attr('fill', 'darkorange')
+            .attr('fill', colors(rank))
             .attr('opacity', (countryName == 'Sverige' ? .1 : 1)) // Change opacity
             .attr('r', function(row) { return zoom * Math.sqrt(row[year]) })
             .attr('cx', function(row) { return 128 + ((width - 128) / domain * rank) + ((width - 128) / domain / 2); })
