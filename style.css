@@ -7,6 +7,19 @@ html {
   font-size: 1rem;
 }
 
+.labelY {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 1rem;
+}
+
+#labelYear {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 800;
+  fill: gray;
+  opacity: .10;
+  font-size: 20rem;
+}
+
 .demoChartContainer {
 	position: relative;
 }
