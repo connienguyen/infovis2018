@@ -3,7 +3,7 @@ var yearSlider;
 var bubbleReducer = 110;
 var stories = null;
 var storyIDs = null;
-var swedenCheckbox;
+var swedenCheckbox = null;
 
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -39,16 +39,16 @@ document.addEventListener('DOMContentLoaded', function(){
 const createDemographicsBubbleChart = function(demographics){
   // Returns total amount for one country (aggregating age groups)
   const getTotalFor = function(country) {
-    var countries = demographics.filter(function(row){ return row['födelseland'] == country; });
+    var countries = demographics.filter(function(row){ return row['country of origin'] == country; });
     var amounts = countries.map( row => row['2017'] );
     var total = 0;
     amounts.forEach(function(amount){ total += amount; });
     return total;
   }
 
-  var ages = demographics.filter(function(row){ return row['födelseland'] == 'Afghanistan'; })
+  var ages = demographics.filter(function(row){ return row['country of origin'] == 'Afghanistan'; })
                           .map( row => row['age'] );
-  var countries = _.uniq(demographics.map( row => row['födelseland']));
+  var countries = _.uniq(demographics.map( row => row['country of origin']));
   var countryTotals = countries.map( function(country){ return { name: country, total: getTotalFor(country), }; });
   var countriesSortedBySize = _.sortBy(countryTotals, function(country){ return -country.total; });
   var largestCountries = _.take(countriesSortedBySize, 11);
@@ -85,7 +85,7 @@ const createDemographicsBubbleChart = function(demographics){
 
   swedenCheckbox.addEventListener('change', function(e) {
     showSweden = e.target.checked;
-    var bubblesForSweden = svg.selectAll('.' + 'Sverige')
+    var bubblesForSweden = svg.selectAll('.' + 'Sweden')
     .transition()
     .duration(250)
     .attr('opacity', !showSweden ? 0 : 1)
@@ -101,21 +101,21 @@ const createDemographicsBubbleChart = function(demographics){
 
   // Creates bubbles for one country
   const createBubblesFor = function(countryName, rank) {
-    var country = demographics.filter(function(row){ return row['födelseland'] == countryName; });
+    var country = demographics.filter(function(row){ return row['country of origin'] == countryName; });
     var circles = svg.selectAll('circle')
             .data(country, function(row) { return row['2016']; })
           .enter().append('circle')
-            .attr('id', function(d){ return (d['födelseland'] + d['ålder']).replace(/\s+/g, '-') })
+            .attr('id', function(d){ return (d['country of origin'] + d['age']).replace(/\s+/g, '-') })
             .attr('class', countryName.replace(/\s+/g, '-'))
             .attr('fill', colors(rank))
-            .attr('opacity', (!showSweden && countryName == 'Sverige') ? 0 : 1)
+            .attr('opacity', (!showSweden && countryName == 'Sweden') ? 0 : 1)
             .attr('r', function(row) { return zoom * Math.sqrt(row[year]) })
             .attr('cx', function(row) { return 128 + ((width - 128) / domain * rank) + ((width - 128) / domain / 2); })
             .attr('cy', function(row, index) { return height - ((height / range) * index) - (height / range / 2); });
 
     // Listener for clicks
     svg.selectAll('circle').on('click', function(d, i) {
-      var circleID = (d['födelseland'] + d['ålder']).replace(/\s+/g, '-');
+      var circleID = (d['country of origin'] + d['age']).replace(/\s+/g, '-');
       if (storyIDs.includes(circleID)) {
         var found = stories.filter(story => story['AgeGroup'] === circleID);
         if (found.length) {
