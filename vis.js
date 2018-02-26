@@ -40,7 +40,7 @@ const createDemographicsBubbleChart = function(demographics){
   var countries = _.uniq(demographics.map( row => row['födelseland']));
   var countryTotals = countries.map( function(country){ return { name: country, total: getTotalFor(country), }; });
   var countriesSortedBySize = _.sortBy(countryTotals, function(country){ return -country.total; });
-  var largestCountries = _.take(countriesSortedBySize, 10);
+  var largestCountries = _.take(countriesSortedBySize, 11);
   var range = ages.length;
   var domain = largestCountries.length;
   const getZoomFactor = function(sliderValue) { return 64 / (largestCountries[0].total * 0.005) * sliderValue; };
@@ -67,7 +67,7 @@ const createDemographicsBubbleChart = function(demographics){
         .attr('r', function(row) { return zoom * Math.sqrt(row[year]) })
     });
     var currentYearArray = [year.toString()];
-    var yearLabel = svg.select('labelYear').text(year.toString());
+    var yearLabel = svg.select('#labelYear').text(year.toString());
   });
 
   var yearLabel = svg.append('text')
@@ -86,7 +86,7 @@ const createDemographicsBubbleChart = function(demographics){
           .enter().append('circle')
             .attr('id', function(d){ return (d['födelseland'] + d['ålder']).replace(/\s+/g, '-') })
             .attr('class', countryName.replace(/\s+/g, '-'))
-            .attr('fill', 'steelblue')
+            .attr('fill', 'darkorange')
             .attr('opacity', (countryName == 'Sverige' ? .1 : 1)) // Change opacity
             .attr('r', function(row) { return zoom * Math.sqrt(row[year]) })
             .attr('cx', function(row) { return 128 + ((width - 128) / domain * rank) + ((width - 128) / domain / 2); })
