@@ -8,19 +8,51 @@
     <script src="jquery-3.3.1.min.js"></script>
     <script src="vis.js"></script>
     <script src="popup.js"></script>
+    <script type="text/javascript" src="jquery.fullPage.js"></script>
     <link href="style.css" rel="stylesheet" type="text/css">
   </head>
   <body>
-    <div class="demoChartContainer">
-      <svg id="demoSVG" width="1024" height="700">
-      </svg>
-    </div>
-    <input type="range" min="1" max="128" step="1" value="64" id="zoomSlider">
-    <input type="range" min="2000" max="2017" step="1" value="2000" id="yearSlider">
-    <input type="checkbox" id="showSweden" value="hideSweden" checked="true">
+    <div id="fullpage">
 
-    <div class="educationChartContainer">
-      <svg id="educationSVG" width="1024" height="700"></svg>
+      <div class="section">
+        <h2>This is the catch-interest page</h2>
+      </div>
+
+      <div class="section">
+        <h2>This is the instructions and definitions page</h2>
+      </div>
+
+      <div class="section">
+        <div class="demoChartContainer">
+          <svg id="demoSVG" width="1536" height="700">
+          </svg>
+        </div>
+        <div class="controllers">
+          <input type="range" min="1" max="128" step="1" value="64" id="zoomSlider">
+          <input type="range" min="2000" max="2017" step="1" value="2000" id="yearSlider">
+          <input type="checkbox" id="showSweden" value="hideSweden" checked="true">
+          <label for="showSweden">Show Sweden</label> 
+        </div>
+      </div>
+
+     <div class="section">
+        <h2>Education chart</h2>
+      <div class="educationChartContainer">
+        <svg id="educationSVG" width="1536" height="700"></svg>
+      </div>
     </div>
+
+    <div class="section">
+      <div class="employmentChartContainer">
+        <svg id="employmentSVG" width="1537" height="700"></svg>
+      </div>
+      <div class="controllers">
+        <input type="range" min="1" max="128" step="1" value="64" id="zoomSlider2">
+        <input type="range" min="2004" max="2016" step="1" value="2004" id="yearSlider2">
+        <input type="checkbox" id="showSweden2" value="hideSweden" checked="true">
+        <label for="showSweden2">Show Sweden</label> 
+     </div>
+    </div>
+  </div>
   </body>
 </html>
