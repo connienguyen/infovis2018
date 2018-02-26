@@ -29,7 +29,7 @@ const createDemographicsBubbleChart = function(demographics){
   // Returns total amount for one country (aggregating age groups)
   const getTotalFor = function(country) {
     var countries = demographics.filter(function(row){ return row['födelseland'] == country; });
-    var amounts = countries.map( row => row['2016'] );
+    var amounts = countries.map( row => row['2017'] );
     var total = 0;
     amounts.forEach(function(amount){ total += amount; });
     return total;
@@ -51,22 +51,32 @@ const createDemographicsBubbleChart = function(demographics){
   var svg = d3.select('svg');
 
   zoomSlider.addEventListener('input', function(e) {
-    console.log(e.target.value)
     zoom = getZoomFactor(e.target.value);
     largestCountries.forEach(function(country){
-      var bubblesForCountry = svg.selectAll('.' + country.name.substring(0,5)) // Substring=hack to avoid classname with spaces
+      var bubblesForCountry = svg.selectAll('.' + country.name.replace(/\s+/g, '-'))
         .attr('r', function(row) { return zoom * Math.sqrt(row[year]) })
     });
   });
 
   yearSlider.addEventListener('input', function(e) {
-    console.log(e.target.value)
     year = e.target.value;
     largestCountries.forEach(function(country){
-      var bubblesForCountry = svg.selectAll('.' + country.name.substring(0,5)) // Substring=hack to avoid classname with spaces
+      var bubblesForCountry = svg.selectAll('.' + country.name.replace(/\s+/g, '-'))
+        .transition()
+        .duration(100)
         .attr('r', function(row) { return zoom * Math.sqrt(row[year]) })
     });
+    var currentYearArray = [year.toString()];
+    var yearLabel = svg.select('labelYear').text(year.toString());
   });
+
+  var yearLabel = svg.append('text')
+          .text(year.toString())
+          .attr('id', 'labelYear')
+          .attr('text-anchor', 'end')
+          .attr('x', function(name, rank) { return width; })
+          .attr('y', height - 32)
+        .exit().remove();
 
   // Creates bubbles for one country
   const createBubblesFor = function(countryName, rank) {
@@ -74,7 +84,8 @@ const createDemographicsBubbleChart = function(demographics){
     var circles = svg.selectAll('circle')
             .data(country, function(row) { return row['2016']; })
           .enter().append('circle')
-            .attr('class', countryName.substring(0,5)) // Substring=hack to avoid classname with spaces
+            .attr('id', function(d){ return (d['födelseland'] + d['ålder']).replace(/\s+/g, '-') })
+            .attr('class', countryName.replace(/\s+/g, '-'))
             .attr('fill', 'steelblue')
             .attr('opacity', (countryName == 'Sverige' ? .1 : 1)) // Change opacity
             .attr('r', function(row) { return zoom * Math.sqrt(row[year]) })
@@ -87,7 +98,7 @@ const createDemographicsBubbleChart = function(demographics){
   });
 
   // Create labels along Y axis
-  var ageLabels = svg.selectAll('text')
+  var ageLabels = svg.selectAll('labelY')
           .data(ages, function(age) { return age; })
         .enter().append('text')
           .text(function(age) { return age; })
@@ -99,7 +110,7 @@ const createDemographicsBubbleChart = function(demographics){
         .exit().remove();
 
   // create labels along X axis
-  var ageLabels = svg.selectAll('text')
+  var yearLabels = svg.selectAll('labelX')
           .data(largestCountries, function(country) { return country; })
         .enter().append('text')
           .text(function(country) { return (country.name.length > 10 ? country.name.substring(0,9) + '...' : country.name); })
