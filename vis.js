@@ -1,5 +1,6 @@
 var zoomSlider;
 var bubbleReducer = 110;
+var stories = null;
 
 document.addEventListener('DOMContentLoaded', function(){
 
@@ -7,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function(){
   var educationCSV = "data/education.csv";
   var employmentCSV = "data/employment_only_job.csv";
   var demographicsCSV = "data/demographics.csv";
+  var storiesCSV = "data/stories.csv";
   d3.csv(demographicsCSV, function(demographics){
     // Demographics is an array of objects
     // Each object has members födelseland, ålder, 2000, ... 2016
@@ -20,6 +22,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
     createDemographicsBubbleChart(demographics);
   });
+
+  d3.csv(storiesCSV, function (csvStories) {
+    csvStories.forEach(function (row) {
+      row['CircleID'] = row['Country']+row['AgeGroup'];
+    })
+  })
 
   zoomSlider = document.getElementById('zoomSlider');
 });
