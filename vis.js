@@ -1,3 +1,6 @@
+var zoomSlider;
+var yearSlider;
+var eduYearSlider;
 var bubbleReducer = 20;
 var stories = null;
 var storyIDs = null;
@@ -30,6 +33,19 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     createDemographicsBubbleChart(demographics);
+    $(document).trigger('demoLoaded');
+  });
+
+  d3.csv(educationCSV, function (educations) {
+    educations.forEach(function(row) {
+      for (var i = 2000; i <= 2017; i++) {
+        row[i.toString()] = +row[i.toString()];
+      }
+    })
+
+    $(document).on('demoLoaded', function() {
+      createEducationBubbleChart(educations);
+    })
   });
 
   d3.csv(storiesCSV, function (csvStories) {
@@ -46,8 +62,10 @@ document.addEventListener('DOMContentLoaded', function(){
     createEmploymentBubbleChart(employment_combined);
   });
 
+  eduYearSlider = document.getElementById('eduYearSlider');
 });
 
+var largest = [];   // Common largest countries to use across SVGs
 const createDemographicsBubbleChart = function(demographics){
   // Returns total amount for one country (aggregating age groups)
   var bubbleZoom = 1;
@@ -72,13 +90,14 @@ const createDemographicsBubbleChart = function(demographics){
   var countryTotals = countries.map( function(country){ return { name: country, total: getTotalFor(country), }; });
   var countriesSortedBySize = _.sortBy(countryTotals, function(country){ return -country.total; });
   var largestCountries = _.take(countriesSortedBySize, 11);
+  largest = largestCountries;
   var range = ages.length;
   var domain = largestCountries.length;
   const getZoomFactor = function(sliderValue) { return 64 / (largestCountries[0].total * 0.005) * sliderValue; };
   var zoom = getZoomFactor(zoomSlider.value);
   var year = yearSlider.value;
   var height = 700 - 16;
-  var width = 1536;
+  var width = 1280;
   var svg = d3.select('svg#demoSVG');
   var colors = d3.scaleOrdinal(d3.schemeDark2);
   var showSweden = swedenCheckbox.checked;
@@ -214,6 +233,93 @@ const createDemographicsBubbleChart = function(demographics){
         .exit().remove();
 };
 
+const createEducationBubbleChart = function (educations) {
+  // Not useful since SVGs don't allow new lines
+  function levelLabel(string) {
+    var mid = string.length / 2;
+    var spaceInd = string.indexOf(' ', mid);
+    if (spaceInd > 0) {
+      return string.substr(0, spaceInd) + '\r' + string.substr(spaceInd+1);
+    }
+
+    return string
+  }
+
+  var levels = educations.filter(function(row) {
+    return row['country of origin'] == 'Afghanistan'
+  }).map(row => row['level of education']);
+
+  var zoom = 0.7;
+  var year = eduYearSlider.value;
+  var range = levels.length;
+  var domain = largest.length;
+  var height = 700 - 16;
+  var width = 1280;
+  var svg = d3.select('svg#educationSVG');
+  var colors = d3.scaleOrdinal(d3.schemeDark2);
+
+  eduYearSlider.addEventListener('input', function (e) {
+    year = e.target.value;
+    largest.forEach(function(country) {
+      var bubblesForCountry = svg.selectAll('.' + country.name.replace(/\s+/g, '-'))
+            .transition()
+            .duration(100)
+            .attr('r', function(row) { return zoom * Math.sqrt(row[year]) });
+    });
+
+    svg.select('#labelYear').text(year.toString());
+  })
+
+  var yearLabel = svg.append('text')
+      .text(year.toString())
+      .attr('id', 'labelYear')
+      .attr('text-anchor', 'end')
+      .attr('x', function(name, rank) { return width })
+      .attr('y', height - 32)
+      .exit().remove();
+
+  // Create bubles for one country
+  const createBubblesFor = function(countryName, rank) {
+    var country = educations.filter(function(row) {
+      return row['country of origin'] == countryName;
+    })
+    var circles = svg.selectAll('circle')
+        .data(country, function (row) { return row['2016']; })
+        .enter().append('circle')
+        .attr('class', countryName.replace(/\s+/g, '-'))
+        .attr('fill', colors(rank))
+        .attr('r', function(row) { return zoom * Math.sqrt(row[year]) })
+        .attr('cx', function(row) { return 128 + ((width - 128) / domain * rank) + ((width - 128) / domain / 2); })
+        .attr('cy', function(row, index) { return height - ((height/range) * index) - (height / range / 2); })
+  }
+
+  largest.forEach(function(country, index) {
+    createBubblesFor(country.name, index);
+  })
+
+  var levelsLabels = svg.selectAll('labelY')
+        .data(levels, function (level) { return level; })
+        .enter().append('text')
+        .text(function(level) { return levelLabel(level); })
+        .attr('text-anchor', 'end')
+        .attr('alignment-baseline', 'central')
+        .attr('class', 'labelX')
+        .attr('x', 128)
+        .attr('y', function(level, index) { return height - ((height / range) * index) - (height / range / 2)})
+        .exit().remove();
+
+  var countryLabels = svg.selectAll('labelX')
+        .data(largest, function (country) {return country; })
+        .enter().append('text')
+        .text(function(country) { return (country.name.length > 10 ? country.name.substring(0,9) + '...' : country.name )})
+        .attr('text-anchor', 'middle')
+        .attr('alignment-baseline', 'bottom')
+        .attr('class', 'labelX')
+        .attr('x', function (name, rank) { return 128 + ((width - 128) / domain * rank) + ((width - 128) / domain / 2);})
+        .attr('y', height)
+        .exit().remove();
+} 
+
 const createEmploymentBubbleChart = function(employment_combined){
   var bubbleZoom = 1;
   // Returns total amount for one country (aggregating age groups)
@@ -245,7 +351,7 @@ const createEmploymentBubbleChart = function(employment_combined){
   var zoom = getZoomFactor(zoomSlider2.value);
   var year = yearSlider2.value;
   var height = 700 - 16;
-  var width = 1537;
+  var width = 1280;
   var svg = d3.select('svg#employmentSVG');
   var colors = d3.scaleOrdinal(d3.schemeDark2);
   var showSweden = swedenCheckbox2.checked;
