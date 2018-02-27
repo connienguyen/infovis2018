@@ -52,7 +52,7 @@ body {
 }
 
 .section-content {
-	padding: 20px 30px;
+	padding: 5px 30px 0;
 }
 
 .col-container {
@@ -74,7 +74,7 @@ body {
 
 .controllers {
 	width: 90%;
-	margin: 30px auto 0;
+	margin: 10px auto 0;
 }
 
 .input-group {
@@ -93,7 +93,7 @@ label {
 svg {
 	display: block;
 	width: 90%;
-	height: 85%;
+	height: 80%;
 	max-height: 686px;
 	margin: 0 auto;
 }

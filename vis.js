@@ -200,7 +200,7 @@ const createDemographicsBubbleChart = function(demographics){
     stories.forEach(function (story) {
       var circleID = story.AgeGroup;
       svg.select('#' + circleID)
-        .attr('stroke', 'red')
+        .attr('stroke', 'darkblue')
         .attr('stroke-width', '5px');
     })
   };
