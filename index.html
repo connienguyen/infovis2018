@@ -15,45 +15,96 @@
     <div id="fullpage">
 
       <div class="section">
-        <h2>This is the catch-interest page</h2>
-      </div>
+        <div class="section-content">
+          <h2>Immigration to Sweden</h2>
+          <div class="col-container">
+            <div class="col-half instructions">
+              <h3>Instructions</h3>
+              <div>
+                <p>Explore different data on immigrants in Sweden. In the graphs below we present country specific data on all immigrants from these countries.</p>
 
-      <div class="section">
-        <h2>This is the instructions and definitions page</h2>
-      </div>
+                <p>You can click the countries and see relevant facts relating to migration from this country to Sweden. For certain data you will find personal stories behind the data.</p>
+              </div>
+            </div>
+            <div class="col-half definitions">
+              <h3>Definitions</h3>
+              <div>
+                <p>International migrant: A person who is living in a country other than his or her country of birth.</p>
+                <p>Internal migrant: A person who is living in the same country as his or her country of birth but at a different location in this country.</p>
+                <p>Refugee: Person fleeing armed conflict or persecution.</p>
+                <p>Migrant: A person who choose to move not because of a direct threat of persecution or death, but mainly to improve their lives by finding work, or in some cases for education, family reunion, or other reasons.</p>
 
-      <div class="section">
-        <h2>Demographics</h2>
-        <div class="demoChartContainer">
-          <svg id="demoSVG" width="1280" height="700">
-          </svg>
+                <p>Source:
+                  <ul>
+                    <li><a href="http://www.unhcr.org/news/latest/2016/7/55df0e556/unhcr-viewpoint-refugee-migrant-right.html" target="_blank">UNHCR</a></li>
+                    <li><a href="http://www.un.org/en/development/desa/population/migration/publications/migrationreport/docs/MigrationReport2017.pdf" target="_blank">UN</a></li>
+                  </ul>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="controllers">
-          <input type="range" min="1" max="128" step="1" value="64" id="zoomSlider">
-          <input type="range" min="2000" max="2017" step="1" value="2000" id="yearSlider">
-          <input type="checkbox" id="showSweden" value="hideSweden" checked="true">
-          <label for="showSweden">Show Sweden</label> 
+      </div>
+
+      <div class="section">
+        <div class="section-content">
+          <h2>Demographics</h2>
+          <div class="demoChartContainer">
+            <svg id="demoSVG">
+            </svg>
+          </div>
+          <div class="controllers">
+            <div class="input-group">
+              <label for="zoomSlider">Zoom</label>
+              <input type="range" min="1" max="128" step="1" value="64" id="zoomSlider">
+            </div>
+
+            <div class="input-group">
+              <label for="yearSlider">Year</label>
+              <input type="range" min="2000" max="2017" step="1" value="2000" id="yearSlider">
+            </div>
+
+            <input type="checkbox" id="showSweden" value="hideSweden" checked="true">
+            <label for="showSweden">Show Sweden</label> 
+          </div>
         </div>
       </div>
 
      <div class="section">
-        <h2>Education</h2>
-        <div class="educationChartContainer">
-          <svg id="educationSVG" width="1280" height="700"></svg>
+        <div class="section-content">
+          <h2>Education</h2>
+          <div class="educationChartContainer">
+            <svg id="educationSVG" width="1280" height="700"></svg>
+          </div>
+          <div class="controllers">
+            <div class="input-group">
+              <label for="eduYearSlider">Year</label>
+              <input type="range" min="2000" max="2016" step="1" value="2000" id="eduYearSlider">
+            </div>
+          </div>
         </div>
-        <input type="range" min="2000" max="2016" step="1" value="2000" id="eduYearSlider">
     </div>
     
     <div class="section">
-      <h2>Employment</h2>
-      <div class="employmentChartContainer">
-        <svg id="employmentSVG" width="1280" height="700"></svg>
-      </div>
-      <div class="controllers">
-        <input type="range" min="1" max="128" step="1" value="64" id="zoomSlider2">
-        <input type="range" min="2004" max="2016" step="1" value="2004" id="yearSlider2">
-        <input type="checkbox" id="showSweden2" value="hideSweden" checked="true">
-        <label for="showSweden2">Show Sweden</label> 
+      <div class="section-content">
+        <h2>Employment</h2>
+        <div class="employmentChartContainer">
+          <svg id="employmentSVG" width="1280" height="700"></svg>
+        </div>
+        <div class="controllers">
+          <div class="input-group">
+            <label for="zoomSlider2">Zoom</label>
+            <input type="range" min="1" max="128" step="1" value="64" id="zoomSlider2">
+          </div>
+
+          <div class="input-group">
+            <label for="yearSlider2">Year</label>
+            <input type="range" min="2004" max="2016" step="1" value="2004" id="yearSlider2">
+          </div>
+
+          <input type="checkbox" id="showSweden2" value="hideSweden" checked="true">
+          <label for="showSweden2">Show Sweden</label> 
+       </div>
      </div>
     </div>
   </div>

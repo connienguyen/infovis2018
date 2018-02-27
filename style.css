@@ -1,8 +1,13 @@
 html {
-  font-size: 16px;
+  font-size: 18px;
+  font-family: 'IBM Plex Sans', sans-serif;
 }
 
-body {margin:0;padding:0;}
+body {
+	background: rgb(255, 254, 232);
+	margin:0;
+	padding:0;
+}
 
 .labelX {
   font-family: 'IBM Plex Sans', sans-serif;
@@ -44,4 +49,51 @@ body {margin:0;padding:0;}
 	position: absolute;
 	top: 10px;
 	right: 10px;
+}
+
+.section-content {
+	padding: 20px 30px;
+}
+
+.col-container {
+	width: 100%;
+	overflow: hidden;
+	font-size: 24px;
+}
+
+.col-half {
+	float: left;
+	width: 40%;
+	margin-left: 40px;
+	padding: 10px 40px 20px;
+}
+
+.col-half:first-child {
+	margin-left: 0;
+}
+
+.controllers {
+	width: 90%;
+	margin: 30px auto 0;
+}
+
+.input-group {
+	display: inline-block;
+	margin-right: 10px;
+}
+
+label {
+	font-weight: bold;
+}
+
+.input-group label {
+	display: block;
+}
+
+svg {
+	display: block;
+	width: 90%;
+	height: 85%;
+	max-height: 686px;
+	margin: 0 auto;
 }

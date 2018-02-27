@@ -8,7 +8,7 @@ var storyIDs = null;
 // Initializing fullpage and setting the options
 $(document).ready(function() {
 	$('#fullpage').fullpage({
-    sectionsColor : ['#e8c2b7', '#ca4646', '#c0d6e4', '#ffcb6c', '#feff73'],
+    sectionsColor : ['#fffee8', '#f9f9cf', '#fffee8', '#f9f9cf'],
     //paddingTop: '8em',
 		//paddingBottom: '10px'
   });
@@ -99,6 +99,7 @@ const createDemographicsBubbleChart = function(demographics){
   var height = 700 - 16;
   var width = 1280;
   var svg = d3.select('svg#demoSVG');
+  var domSVG = document.getElementById('#demoSVG');
   var colors = d3.scaleOrdinal(d3.schemeDark2);
   var showSweden = swedenCheckbox.checked;
   
